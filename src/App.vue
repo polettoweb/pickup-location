@@ -11,11 +11,9 @@
               <ul>
                   <li v-for="specificLocation in listOfResults" :key="specificLocation.bookingId" role="menuitem">
                       <a>
-                          <span :class="`location-type-${specificLocation.placeType.toLowerCase()}`"></span>
+                          <span :class="`location-type-${specificLocation.placeType ? specificLocation.placeType.toLowerCase() : ''}`"></span>
                           <div class="location-name">
-                              <p>
-                              {{specificLocation.name}}
-                              </p>
+                              <p v-html="highlight(specificLocation.name)"></p>
                               <span>{{specificLocation.region}}, {{specificLocation.country}}</span>
                           </div>
                     </a>
@@ -43,14 +41,22 @@ export default {
   methods: {
     retrieveLocations(event) {
       this.location = event.target.value;
-      if (this.location.length > 2) {
+      if (this.location.length > 1) {
         let url = `https://cors.io/?https://www.rentalcars.com/FTSAutocomplete.do?solrIndex=fts_en&solrRows=${this.numberOfResults}&solrTerm=${this.location}`;
         axios.get(url)
         .then(res => {
           this.listOfResults = res.data.results.docs;
         })
+      } else {
+          this.listOfResults = '';
       }
       
+    },
+    highlight(string) {
+        if(!this.location) return;
+        return string.replace(new RegExp(this.location, "gi"), match => {
+            return '<em>' + match + '</em>' ;
+        });
     },
     nameSplit(value) {
           if (!value) return ''
