@@ -30,12 +30,12 @@
                         :class="{'location-no-results': numberInList > 0 &&  specificLocation.bookingId === undefined}"
                         @keyup.enter="selectLocation(specificLocation.name,hasIata(specificLocation.iata), specificLocation.region, specificLocation.country)"
                         >
-                            <a v-if="numberInList > 0 &&  specificLocation.bookingId === undefined" @click="searchActive = false">
+                            <a v-if="numberInList > 0 &&  specificLocation.bookingId === undefined" @click="searchActive = false" :title="specificLocation.name">
                                 <div class="location-name">
                                     <p>{{specificLocation.name}}</p>
                                 </div>
                             </a>
-                            <a v-else @click="selectLocation(specificLocation.name,hasIata(specificLocation.iata), specificLocation.region, specificLocation.country)">
+                            <a v-else :title="specificLocation.name" @click="selectLocation(specificLocation.name,hasIata(specificLocation.iata), specificLocation.region, specificLocation.country)">
                                 <span :class="`location-type location-type${specificLocation.placeType ? `-${specificLocation.placeType.toLowerCase()}` : ''}`"></span>
                                 <div class="location-name">
                                     <p v-html="highlight(specificLocation.name,hasIata(specificLocation.iata))"></p>
